@@ -1,9 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import morgan from 'morgan';
-import connectDB from './utils/db';
-import { config } from './utils/config';
-import bookRouter from './book/bookRouter';
+import userRouter from './routes/userRoute';
+import { config } from './db/config';
+import connectDB from './db/db';
 
 const port = config.port || 3000;
 const app = express();
@@ -11,16 +10,14 @@ const app = express();
 // Middleware
 app.use(express.json()); // Parse JSON requests
 app.use(cors()); // Enable CORS
-app.use(morgan('dev')); // Log HTTP requests
 
 // Connect to Database
 const startServer = async () => {
+  // Start Server
   await connectDB();
 
-  // Routes
-  app.use('/api/books', bookRouter);
+  app.use('/api/users', userRouter);
 
-  // Start Server
   app.listen(port, () => {
     console.log(`Listening on port: ${port}`);
   });
